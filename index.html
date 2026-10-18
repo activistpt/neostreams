@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeoStreams — TV ao vivo, Desporto, Filmes e Séries</title>
+<meta name="description" content="NeoStreams: assiste canais ao vivo de Portugal e do mundo. Desporto, notícias, entretenimento. Sem subscrição.">
+<link rel="icon" href="https://files.catbox.moe/8jaedk.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="lib/hls.min.js"></script>
+<script src="lib/mpegts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js" defer></script>
+</head>
+<body>
+<header class="header">
+  <nav class="nav">
+    <a href="#" class="logo" id="logoHome"><img class="logo-img" src="https://files.catbox.moe/8jaedk.jpg" alt="NeoStreams"><span>NEOSTREAMS<small>LIVE TV • PT</small></span></a>
+    <div class="nav-links">
+      <a href="#" class="nav-link active" data-section="home">Início</a>
+      <a href="#" class="nav-link" data-section="categories">Categorias</a>
+      <a href="#" class="nav-link" data-section="countries">Países</a>
+      <a href="#" class="nav-link" data-section="favorites">Favoritos</a>
+      <a href="#" class="nav-link" data-section="support">Suporte</a>
+      <a href="#" class="nav-link" id="navAddList">＋ Lista</a>
+    </div>
+    <div class="search-container">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="text" class="search-input" placeholder="Procurar canais..." id="searchInput">
+    </div>
+    <button class="cta-button secondary" id="loginBtn">🔑 Entrar</button>
+    <button class="cta-button secondary" id="logoutBtn">Sair</button>
+  </nav>
+</header>
+
+<div class="player-modal" id="playerModal">
+  <div class="player-container">
+    <div class="player-header">
+      <div class="channel-info">
+        <div class="live-badge"><span class="live-dot"></span>LIVE</div>
+        <h2 id="playerChannelName">Canal</h2>
+      </div>
+      <div class="player-controls">
+        <button class="player-btn" id="miniBtn" title="Minimizar (ver enquanto navegas)">−</button>
+        <button class="player-btn" id="expandBtn" title="Expandir" style="display:none">⛶</button>
+        <button class="player-btn" id="pipBtn" title="Janela flutuante">🖼</button>
+        <button class="player-btn" id="fullscreenBtn" title="Ecrã inteiro">⛶</button>
+        <button class="player-btn" id="closePlayer" title="Fechar">✕</button>
+      </div>
+    </div>
+    <div class="video-wrapper">
+      <video id="videoPlayer" controls autoplay playsinline></video>
+      <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><p id="loadingText">A ligar stream...</p></div>
+    </div>
+    <div class="player-footer">
+      <div class="channel-meta"><span id="playerCountry" class="meta-tag"></span><span id="playerCategory" class="meta-tag"></span></div>
+      <div class="stream-meta" id="streamMeta"></div>
+      <div class="player-actions">
+        <button class="action-btn" id="retryBtn">↻ Tentar de novo</button>
+        <button class="action-btn" id="proxyBtn">⇄ Trocar proxy</button>
+        <button class="action-btn" id="diagBtn" title="Copiar diagnóstico para o suporte">📋 Diagnóstico</button>
+        <button class="action-btn" id="prevBtn">⏮ Anterior</button>
+        <button class="action-btn" id="nextBtn">⏭ Seguinte</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="hero" id="heroSection">
+    <div class="hero-content">
+      <img class="hero-logo" src="https://files.catbox.moe/8jaedk.jpg" alt="NeoStreams">
+      <div class="hero-badge"><span class="pulse-dot"></span>EM DIRETO • PORTUGAL + MUNDO</div>
+      <h1 class="hero-title"><span class="title-highlight">NeoStreams</span> — TV ao vivo<br>sem subscrição</h1>
+      <p class="hero-subtitle">Desporto português (Sport TV, DAZN Eleven, A Bola), notícias, entretenimento e milhares de canais mundiais via IPTV-Org.<br>Player multi-formato com proxys automáticos.</p>
+      <div class="hero-cta">
+        <button class="cta-button primary" id="startBtn">▶ Começar a ver</button>
+        <button class="cta-button secondary" id="browseBtn">Ver categorias</button>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div class="stat"><span class="stat-number" id="totalChannels">0</span><span class="stat-label">Canais</span></div>
+        <div class="stat"><span class="stat-number" id="totalCountries">0</span><span class="stat-label">Países</span></div>
+        <div class="stat"><span class="stat-number" id="totalCategories">0</span><span class="stat-label">Categorias</span></div>
+      </div>
+      <p class="hero-info" id="heroInfoLine" style="display:none">mais de <b>9000 canais</b> em <b>40 países</b> por <b>56 categorias</b> disponíveis</p>
+    </div>
+  </section>
+
+  <div class="sources-bar" id="sourcesBar"></div>
+
+  <div class="type-tabs" id="typeTabs">
+    <button class="tab active" data-type="live">📺 AO VIVO <span class="count" id="cntLive"></span></button>
+    <button class="tab" data-type="movies">🎬 FILMES <span class="count" id="cntMovies"></span></button>
+    <button class="tab" data-type="series">🍿 SÉRIES <span class="count" id="cntSeries"></span></button>
+  </div>
+
+  <div class="main">
+    <div id="memberBanner">🔓 Estás a ver as <b>tuas listas</b>. <button class="action-btn" id="memberLoginBtn">Entrar para o catálogo completo</button></div>
+    <div id="lockedBox">
+      <div class="locked-card">
+        <div style="font-size:42px">🔒</div>
+        <h2>Conteúdo exclusivo para membros</h2>
+        <p class="locked-desc">Mais de <b>9000 canais</b>, mais de <b>40 países</b> organizados por <b>56 categorias</b>, com <b>filmes e séries</b>.</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="cta-button primary" id="lockedLoginBtn">🔑 Fazer login</button>
+          <button class="cta-button secondary" id="lockedAddBtn">＋ Adicionar a minha lista</button>
+        </div>
+        <p style="font-size:13px"><a href="#" id="lockedReqBtn">🎁 Solicitar acesso grátis por 30 dias</a></p>
+        <p style="font-size:12px">Sem acesso? Pede no <a href="https://t.me/ptlegion" target="_blank" rel="noopener">Telegram</a>.</p>
+      </div>
+    </div>
+    <section class="filter-section" id="categoriesSection">
+      <div class="section-header"><h2 class="section-title">Por categoria</h2></div>
+      <div class="categories-scroll" id="categoriesContainer"></div>
+    </section>
+    <section class="filter-section" id="countriesSection">
+      <div class="section-header">
+        <h2 class="section-title">Por país</h2>
+        <div class="country-search-container">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="text" class="country-search-input" placeholder="Procurar país..." id="countrySearchInput">
+        </div>
+      </div>
+      <div class="countries-grid" id="countriesContainer"></div>
+    </section>
+    <section id="channelsSection">
+      <div class="section-header">
+        <h2 class="section-title" id="channelsTitle">Todos os canais</h2>
+        <div class="view-options">
+          <button class="view-btn active" id="gridViewBtn">▦</button>
+          <button class="view-btn" id="listViewBtn">☰</button>
+        </div>
+      </div>
+      <div class="channels-grid" id="channelsContainer"></div>
+      <div class="load-more-container"><button class="load-more-btn" id="loadMoreBtn">Carregar mais</button></div>
+    </section>
+    <section class="filter-section" id="supportSection">
+      <div class="section-header"><h2 class="section-title">Suporte</h2></div>
+      <div class="support-card" id="supportMainCard">
+        <div class="support-brand"><span class="mark">▶</span><div><b>Outsider Gateway</b><span>Suporte oficial NeoStreams</span></div></div>
+        <p>Precisas de ajuda, queres pedir canais ou reportar uma fonte em baixo? Fala connosco:</p>
+        <div class="support-links">
+          <a class="cta-button primary" href="https://t.me/ptlegion" target="_blank" rel="noopener">✈ Telegram — @ptlegion</a>
+          <a class="cta-button secondary" href="https://services.zangi.com/dl/conversation/5695237317" target="_blank" rel="noopener">💬 Zangi Messenger</a>
+          <a class="cta-button secondary" href="https://smp10.simplex.im/g#9vgGXpP958GrQmR5z_X1gxNkPcT1Rf4cnDO8JE5O_VY" target="_blank" rel="noopener">🔒 Simplex Chat</a>
+          <a class="cta-button secondary" href="https://www.linphone.org/en/download/" target="_blank" rel="noopener">📞 Linphone VOIP</a>
+        </div>
+        <p style="margin-top:10px">Referência Linphone: <b>→ sip:ptlegion@sip.linphone.org</b></p>
+      </div>
+      <div class="support-card">
+        <div class="support-brand"><div><b>🔌 Teste de ligação</b><span>descobre onde bloqueia</span></div></div>
+        <p>Corre este teste no aparelho onde os canais falham e envia o resultado no Telegram:</p>
+        <div class="support-links"><button class="cta-button secondary" id="connTestBtn">▶ Correr teste</button></div>
+        <div id="connResults" style="margin-top:12px;font-size:13px;display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+      <div class="support-card">
+        <div class="support-brand"><div><b>☕ Apoiar o projeto</b><span>donativos</span></div></div>
+        <p>Se o NeoStreams te é útil, considera fazer um donativo para manter o projeto vivo:</p>
+        <div class="support-links">
+          <a href="https://buymeacoffee.com/ptlegion" target="_blank" rel="noopener" title="Fazer um donativo">
+            <img class="donate-gif" src="https://files.catbox.moe/l0whap.gif" alt="Apoiar NeoStreams" loading="lazy">
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div><a href="#" class="logo"><img class="logo-img" src="https://files.catbox.moe/8jaedk.jpg" alt="NeoStreams"><span>NEOSTREAMS</span></a>
+      <p class="footer-desc">O NeoStreams não aloja streams — apenas organiza e reproduz links de fontes externas (listas próprias e IPTV-Org). Não nos responsabilizamos pela disponibilidade ou conteúdo desses streams.</p></div>
+    <div class="footer-links">
+      <div class="footer-col"><h4>Destaques</h4><a href="#" data-filter-cat="Portugal | Sports">Desporto PT</a><a href="#" data-filter-cat="sports">Sports</a><a href="#" data-filter-cat="news">News</a></div>
+      <div class="footer-col"><h4>Fontes</h4><a href="https://github.com/iptv-org/iptv" target="_blank" rel="noopener">IPTV-Org</a><a href="#" id="manageSources">Gerir listas</a></div>
+      <div class="footer-col"><h4>Suporte</h4><a href="https://t.me/ptlegion" target="_blank" rel="noopener">Telegram</a><a href="https://services.zangi.com/dl/conversation/5695237317" target="_blank" rel="noopener">Zangi</a><a href="https://smp10.simplex.im/g#9vgGXpP958GrQmR5z_X1gxNkPcT1Rf4cnDO8JE5O_VY" target="_blank" rel="noopener">Simplex</a><a href="https://www.linphone.org/en/download/" target="_blank" rel="noopener">Linphone</a></div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 NeoStreams. Todos os direitos reservados. · <a href="#" id="termsLink">Termos e Condições</a></p></div>
+</footer>
+
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-content"><div>⚠️</div><div><b>Aviso legal</b><p style="color:var(--muted);font-size:13px;margin:4px 0">O <b>NeoStreams não aloja, distribui nem se responsabiliza pelos streams</b>. Todos os canais de IPTV são links de <b>fontes externas</b> (listas M3U/Xtream e IPTV-Org) — a disponibilidade e o conteúdo são responsabilidade dessas fontes. Usamos armazenamento local para favoritos e listas.</p>
+  <div class="cookie-actions"><button class="cookie-btn" id="cookieDecline">Sair</button><button class="cookie-btn accept" id="cookieAccept">Compreendo e aceito</button></div></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- Modal gerir listas -->
+<div class="player-modal" id="sourcesModal">
+  <div class="player-container" style="max-width:560px;padding:18px">
+    <h3 style="margin:0 0 10px">Gerir listas <button class="action-btn" id="closeSources" style="float:right">✕</button></h3>
+    <div id="sourcesList"></div>
+    <label style="font-size:12px;color:var(--muted)">URL M3U / Xtream (get.php / player_api.php)</label>
+    <input id="newSrcUrl" class="search-input" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;margin:6px 0" placeholder="http://.../get.php?username=...&password=...&type=m3u_plus">
+    <input id="newSrcName" class="search-input" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;margin:6px 0" placeholder="Nome (opcional)">
+    <button class="cta-button primary" id="addSrcBtn" style="width:100%;justify-content:center">+ Adicionar lista</button>
+  </div>
+</div>
+
+<!-- Modal séries -->
+<div class="player-modal" id="seriesModal">
+  <div class="player-container" style="max-width:560px;padding:18px;max-height:86vh;overflow:auto">
+    <h3 style="margin:0 0 10px"><span id="seriesTitle">Série</span> <button class="action-btn" id="closeSeries" style="float:right">✕</button></h3>
+    <div class="series-seasons" id="seriesSeasons"></div>
+    <div class="series-eps" id="seriesEps"></div>
+  </div>
+</div>
+
+<!-- Modal login -->
+<div class="player-modal" id="loginModal">
+  <div class="player-container" style="max-width:420px;padding:26px">
+    <h3 style="margin:0 0 6px">🔑 Área de membros</h3>
+    <p style="color:var(--muted);font-size:13px">Entra para ver os canais. Sem acesso? Pede no <a href="https://t.me/ptlegion" target="_blank" rel="noopener">Telegram</a>.</p>
+    <label style="font-size:12px;color:var(--muted)">UTILIZADOR</label>
+    <input id="loginUser" class="search-input" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;margin:6px 0" placeholder="username" autocomplete="username">
+    <label style="font-size:12px;color:var(--muted)">PASSWORD</label>
+    <input id="loginPass" type="password" class="search-input" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px;width:100%;margin:6px 0" placeholder="••••••••" autocomplete="current-password">
+    <div id="loginErr" style="display:none;color:#f87171;font-size:13px;margin:6px 0"></div>
+    <button class="cta-button primary" id="loginGo" style="width:100%;justify-content:center;margin-top:8px">Entrar</button>
+    <button class="action-btn" id="reqAccessBtn" style="width:100%;margin-top:8px">🎁 Solicitar acesso grátis por 30 dias</button>
+  </div>
+</div>
+
+<!-- Modal termos -->
+<div class="player-modal" id="termsModal">
+  <div class="player-container" style="max-width:640px;padding:26px;max-height:86vh;overflow:auto">
+    <h3 style="margin:0 0 4px">📋 Termos e Condições</h3>
+    <p style="color:var(--muted);font-size:12px;margin:0 0 14px">NeoStreams — Última atualização: 7 de setembro de 2026. Por favor, leia atentamente antes de utilizar o site.</p>
+    <div class="terms-body">
+      <h4>1. Aceitação dos Termos</h4>
+      <p>Ao aceder ou utilizar este site, concorda em estar vinculado a estes Termos e Condições e a todas as leis aplicáveis. Se não concordar, não deve utilizar o site.</p>
+      <h4>2. Descrição do Serviço</h4>
+      <p>O site oferece acesso a canais de televisão ao vivo, filmes e séries através de links de terceiros. ⚠️ Todo o conteúdo é fornecido por fontes externas e <b>não é hospedado pelo site</b>.</p>
+      <h4>3. Isenção de Responsabilidade e Conteúdo de Terceiros</h4>
+      <p>O site funciona apenas como agregador e não hospeda, transmite, armazena nem controla nenhum conteúdo. Todo o conteúdo é da responsabilidade exclusiva dos terceiros que o fornecem. Não garantimos legalidade, qualidade ou disponibilidade, nem nos responsabilizamos por violações de direitos de autor através do uso do site.</p>
+      <h4>4. Isenção de Garantias</h4>
+      <p>Não garantimos disponibilidade contínua, ausência de erros ou vírus, adequação a qualquer fim, nem legalidade do conteúdo acedido.</p>
+      <h4>5. Limitação de Responsabilidade</h4>
+      <p>Na máxima extensão permitida por lei, não seremos responsáveis por danos diretos ou indiretos, perda de lucros ou dados, nem por problemas técnicos ou interrupções decorrentes do uso do site.</p>
+      <h4>6. Atividades Ilegais e Direitos Autorais</h4>
+      <p>O site não endossa pirataria nem violação de direitos autorais. Cada utilizador é responsável pelo cumprimento das leis do seu país. Reservamo-nos o direito de remover links ou encerrar acessos em caso de violação.</p>
+      <h4>7. Conduta do Utilizador</h4>
+      <p>Concorda em não usar o site para fins ilegais, não interferir no seu funcionamento, não distribuir malware nem contornar medidas de segurança — incluindo a partilha indevida de acessos de membro.</p>
+      <h4>8. Modificações nos Termos</h4>
+      <p>Podemos atualizar estes Termos a qualquer momento. O uso continuado após alterações constitui aceitação.</p>
+      <h4>9. Lei Aplicável e Jurisdição</h4>
+      <p>Estes Termos regem-se pelas leis do país do administrador do site.</p>
+      <h4>10. Contacto</h4>
+      <p>Para dúvidas, use a secção <a href="#" id="termsSupport">Suporte</a> do site.</p>
+    </div>
+    <button class="cta-button primary" id="closeTerms" style="width:100%;justify-content:center;margin-top:10px">Fechar</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

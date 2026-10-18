@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: neostreams
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USER
+        value: ptlegion
+      - key: ADMIN_PASS
+        value: neostreams

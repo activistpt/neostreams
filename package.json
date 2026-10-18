@@ -1,0 +1,12 @@
+{
+  "name": "neostreams",
+  "version": "1.0.0",
+  "description": "NeoStreams — TV ao vivo, Desporto, Filmes e Séries (Player multi-formato + Proxy CORS/HLS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,4 @@
+[
+  { "id": "neo-sports-pt", "name": "NEO Sports & TV PT", "url": "playlists/custom-pt.m3u", "featured": true },
+  { "id": "iptv-org", "name": "IPTV-Org Worldwide (grátis)", "type": "iptv-org" }
+]
