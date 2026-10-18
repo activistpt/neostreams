@@ -1,5 +1,35 @@
 [
   {
+    "id": "geral",
+    "name": "Geral",
+    "type": "m3u",
+    "url": "http://geral.cc/get.php?username=lsVmwXdAe8R4&password=RRe2qF2Q2GVS&type=m3u_plus"
+  },
+  {
+    "id": "tuga-constroi",
+    "name": "Tuga Constroi",
+    "type": "m3u",
+    "url": "http://tugaconstroi.store/get.php?username=732876&password=460894&type=m3u"
+  },
+  {
+    "id": "nexus-security",
+    "name": "Nexus Security",
+    "type": "m3u",
+    "url": "http://nexus.securityservice.cyou:8080/get.php?username=Hugomendoca1&password=cQtNkQEPZ6f&type=m3u_plus"
+  },
+  {
+    "id": "matrix-8",
+    "name": "Matrix 8",
+    "type": "m3u",
+    "url": "http://matrix8ktrex.xyz:80/get.php?username=simonh49&password=949D61391C26&type=m3u_plus"
+  },
+  {
+    "id": "ppv-tv90p",
+    "name": "PPV TV90p",
+    "type": "m3u",
+    "url": "http://ppv.tv90p.me/get.php?username=Gretelalfonso88&password=cstEjHptrE&type=m3u_plus"
+  },
+  {
     "id": "neo-sports-pt",
     "name": "NEO Sports PT (15 canais)",
     "type": "m3u",

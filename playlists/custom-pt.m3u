@@ -1,31 +1,12 @@
 #EXTM3U x-tvg-url="" url-tvg=""
-#EXTINF:-1 tvg-id="sporttvmais.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sport-tv-mais-pt.png" group-title="Portugal | Sports",Sport TV Mais PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/29668
-#EXTINF:-1 tvg-id="sporttvnba.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttvnba.png" group-title="Portugal | Sports",Sport TV NBA PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24981
-#EXTINF:-1 tvg-id="abolatv.pt" tvg-logo="https://docdog.top/logo/countries/portugal/abolatv.png" group-title="Portugal | Sports",A Bola TV PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24987
-#EXTINF:-1 tvg-id="sporttv1.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttv1.png" group-title="Portugal | Sports",Sport TV 1 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24984
-#EXTINF:-1 tvg-id="sporttv2.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttv2.png" group-title="Portugal | Sports",Sport TV 2 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24982
-#EXTINF:-1 tvg-id="sporttv3.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttv3.png" group-title="Portugal | Sports",Sport TV 3 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24980
-#EXTINF:-1 tvg-id="sporttv4.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttv4.png" group-title="Portugal | Sports",Sport TV 4 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24979
-#EXTINF:-1 tvg-id="sporttv5.pt" tvg-logo="https://docdog.top/logo/countries/portugal/sporttv5.png" group-title="Portugal | Sports",Sport TV 5 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24978
-#EXTINF:-1 tvg-id="sporttv6.pt" tvg-logo="https://docdog.top/logo/countries/portugal/Sport_tv_6.png" group-title="Portugal | Sports",Sport TV 6 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/29669
-#EXTINF:-1 tvg-id="eleven1.pt" tvg-logo="https://docdog.top/logo/countries/portugal/elevensport1.png" group-title="Portugal | Sports",DAZN Eleven 1 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/25024
-#EXTINF:-1 tvg-id="eleven2.pt" tvg-logo="https://docdog.top/logo/countries/portugal/elevensport2.png" group-title="Portugal | Sports",DAZN Eleven 2 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/25025
-#EXTINF:-1 tvg-id="eleven3.pt" tvg-logo="https://docdog.top/logo/countries/portugal/elevensport3.png" group-title="Portugal | Sports",DAZN Eleven 3 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/25026
-#EXTINF:-1 tvg-id="eleven4.pt" tvg-logo="https://docdog.top/logo/countries/portugal/elevensport4.png" group-title="Portugal | Sports",DAZN Eleven 4 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/25027
-#EXTINF:-1 tvg-id="eleven5.pt" tvg-logo="https://docdog.top/logo/countries/portugal/Eleven_Sports_5.png" group-title="Portugal | Sports",DAZN Eleven 5 PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/25028
-#EXTINF:-1 tvg-id="eleven6.pt" tvg-logo="https://docdog.top/logo/countries/portugal/elevensports6vip.png" group-title="Portugal | Sports",DAZN Eleven 6 VIP PT
-http://neosfpoo.top:8080/4571764082049390/c38ry7k9fsa9/24983
+#EXTINF:-1 tvg-id="neostreams.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="NEOSTREAMS",NeoStreams PT
+http://geral.cc/get.php?username=lsVmwXdAe8R4&password=RRe2qF2Q2GVS&type=m3u_plus
+#EXTINF:-1 tvg-id="tugaconstroi.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Tuga Constroi
+http://tugaconstroi.store/get.php?username=732876&password=460894&type=m3u
+#EXTINF:-1 tvg-id="nexus.security.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Nexus Security
+http://nexus.securityservice.cyou:8080/get.php?username=Hugomendoca1&password=cQtNkQEPZ6f&type=m3u_plus
+#EXTINF:-1 tvg-id="matrix8ktrex.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Matrix 8
+http://matrix8ktrex.xyz:80/get.php?username=simonh49&password=949D61391C26&type=m3u_plus
+#EXTINF:-1 tvg-id="ppv.tv90p.me" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",PPV TV90p
+http://ppv.tv90p.me/get.php?username=Gretelalfonso88&password=cstEjHptrE&type=m3u_plus
+
