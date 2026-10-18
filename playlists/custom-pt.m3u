@@ -1,11 +1,13 @@
 #EXTM3U x-tvg-url="" url-tvg=""
-#EXTINF:-1 tvg-id="neostreams.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="NEOSTREAMS",NeoStreams PT
+#EXTINF:-1 tvg-id="geral.cc" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="NEOSTREAMS",Geral
 http://geral.cc/get.php?username=lsVmwXdAe8R4&password=RRe2qF2Q2GVS&type=m3u_plus
-#EXTINF:-1 tvg-id="tugaconstroi.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Tuga Constroi
+#EXTINF:-1 tvg-id="tugaconstroi.store" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Tuga Constroi
 http://tugaconstroi.store/get.php?username=732876&password=460894&type=m3u
-#EXTINF:-1 tvg-id="nexus.security.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Nexus Security
-http://nexus.securityservice.cyou:8080/get.php?username=Hugomendoca1&password=cQtNkQEPZ6f&type=m3u_plus
-#EXTINF:-1 tvg-id="matrix8ktrex.pt" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Matrix 8
+#EXTINF:-1 tvg-id="nexus.securityservice.cyou" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Nexus Security
+http://nexus.securityservice.cyou/get.php?username=Hugomendoca1&password=cQtNkQEPZ6f&type=m3u_plus
+#EXTINF:-1 tvg-id="484.qqwawq.xyz" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",484.qqwawq.xyz
+http://484.qqwawq.xyz/get.php?username=qqVrdYd2qpgzxJUs4e&password=lgoUWNjPAo&type=m3u
+#EXTINF:-1 tvg-id="matrix8ktrex.xyz" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",Matrix 8
 http://matrix8ktrex.xyz:80/get.php?username=simonh49&password=949D61391C26&type=m3u_plus
 #EXTINF:-1 tvg-id="ppv.tv90p.me" tvg-logo="https://files.catbox.moe/8jaedk.jpg" group-title="PTV/LEGION",PPV TV90p
 http://ppv.tv90p.me/get.php?username=Gretelalfonso88&password=cstEjHptrE&type=m3u_plus
