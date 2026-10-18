@@ -13,8 +13,8 @@ Clone completo do **NeoStreams** (`neostreams.pages.dev`) preparado para:
 - Lista **NEO Sports & TV PT** pré-configurada em `playlists/custom-pt.m3u`
 
 ## Credenciais da Área de Membros (por omissão)
-- **Utilizador:** `ptlegion` (ou `admin`)
-- **Password:** `neostreams`
+|- **Utilizador:** `pirata`
+|- **Password:** `neoiptv369!`
 *(No Render podes alterar através das variáveis de ambiente `ADMIN_USER` e `ADMIN_PASS`)*
 
 ## Correr localmente no PC

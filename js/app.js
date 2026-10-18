@@ -639,11 +639,11 @@ async function doLogin() {
     }
     if (!j || !j.token) {
       // Fallback estático (GitHub Pages)
-      if ((u === 'pirata' && p === 'neoiptv369!') || ((u === 'admin' || u === 'ptlegion') && (p === 'neostreams' || p === 'admin123'))) {
-        j = { token: 'static-member-token', exp: Date.now() + 30 * 86400 * 1000, user: u };
-      } else {
-        throw new Error('Falha no login');
-      }
+            if (u === 'pirata' && p === 'neoiptv369!') {
+              j = { token: 'static-member-token', exp: Date.now() + 30 * 86400 * 1000, user: u };
+            } else {
+              throw new Error('Falha no login');
+            }
     }
     try { localStorage.setItem(LS_AUTH, JSON.stringify({ token: j.token, exp: j.exp, user: j.user })); } catch (e) {}
     closeLogin();

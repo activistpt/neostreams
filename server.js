@@ -229,9 +229,7 @@ const server = http.createServer(async (req, res) => {
       const pass = String(body.pass || '');
       if (
         (user === 'pirata' && pass === 'neoiptv369!') ||
-        (user === ADMIN_USER && pass === ADMIN_PASS) ||
-        (user === 'admin' && pass === 'neostreams') ||
-        (user === 'ptlegion' && pass === 'neostreams')
+        (user === ADMIN_USER && pass === ADMIN_PASS)
       ) {
         const token = crypto.randomBytes(24).toString('hex');
         const exp = Date.now() + 30 * 24 * 60 * 60 * 1000;
