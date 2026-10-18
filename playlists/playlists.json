@@ -1,4 +1,38 @@
 [
-  { "id": "neo-sports-pt", "name": "NEO Sports & TV PT", "url": "playlists/custom-pt.m3u", "featured": true },
-  { "id": "iptv-org", "name": "IPTV-Org Worldwide (grátis)", "type": "iptv-org" }
+  {
+    "id": "neo-sports-pt",
+    "name": "NEO Sports PT (15 canais)",
+    "type": "m3u",
+    "url": "playlists/custom-pt.m3u",
+    "featured": true,
+    "default": true
+  },
+  {
+    "id": "neos-paxy",
+    "name": "NeoS Paxy (Xtream)",
+    "type": "xtream-m3u",
+    "url": "http://neospaxy.top:8080/get.php?username=851767367448&password=6ed80c5a980f&type=m3u_plus",
+    "xtream": {
+      "base": "http://neospaxy.top:8080/",
+      "username": "851767367448",
+      "password": "6ed80c5a980f"
+    }
+  },
+  {
+    "id": "peramancas",
+    "name": "Peramancas (Xtream)",
+    "type": "xtream-m3u",
+    "url": "http://peramancas.mine.nu:80/get.php?username=sacavem&password=pedro8062026&type=m3u_plus",
+    "xtream": {
+      "base": "http://peramancas.mine.nu:80/",
+      "username": "sacavem",
+      "password": "pedro8062026"
+    }
+  },
+  {
+    "id": "iptv-org",
+    "name": "IPTV-Org Worldwide (grátis)",
+    "type": "iptv-org",
+    "url": "iptv-org"
+  }
 ]

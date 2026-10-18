@@ -10,6 +10,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: ADMIN_USER
-        value: ptlegion
+        value: pirata
       - key: ADMIN_PASS
-        value: neostreams
+        value: neoiptv369!

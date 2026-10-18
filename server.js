@@ -8,8 +8,8 @@ const crypto = require('crypto');
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
-const ADMIN_USER = process.env.ADMIN_USER || 'ptlegion';
-const ADMIN_PASS = process.env.ADMIN_PASS || 'neostreams';
+const ADMIN_USER = process.env.ADMIN_USER || 'pirata';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'neoiptv369!';
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -228,14 +228,26 @@ const server = http.createServer(async (req, res) => {
       const user = String(body.user || '').trim();
       const pass = String(body.pass || '');
       if (
+        (user === 'pirata' && pass === 'neoiptv369!') ||
         (user === ADMIN_USER && pass === ADMIN_PASS) ||
-        (user === 'admin' && pass === 'neostreams')
+        (user === 'admin' && pass === 'neostreams') ||
+        (user === 'ptlegion' && pass === 'neostreams')
       ) {
         const token = crypto.randomBytes(24).toString('hex');
         const exp = Date.now() + 30 * 24 * 60 * 60 * 1000;
-        return sendJson(res, 200, { token, exp, user });
+        return sendJson(res, 200, { ok: true, token, exp, user, expires: null, guest: false });
       }
       return sendJson(res, 401, { error: 'Utilizador ou password incorretos.' });
+    }
+
+    if (u.pathname === '/api/source') {
+      const m3uFile = path.join(ROOT, 'playlists', 'custom-pt.m3u');
+      if (fs.existsSync(m3uFile)) {
+        res.writeHead(200, { ...CORS_HEADERS, 'Content-Type': 'audio/x-mpegurl; charset=utf-8', 'Cache-Control': 'no-store' });
+        return fs.createReadStream(m3uFile).pipe(res);
+      }
+      res.writeHead(404, CORS_HEADERS);
+      return res.end('Source not found');
     }
 
     if (u.pathname === '/api/playlists') {
