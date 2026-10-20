@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NeoStreams</string>
+    <string name="app_description">NeoStreams Native Android Client</string>
+    <string name="login_hint">Acesso NeoStreams Cyberpunk</string>
+    <string name="username_hint">Usuário</string>
+    <string name="password_hint">Senha</string>
+    <string name="login_button">CONECTAR</string>
+    <string name="retry_button">TENTAR NOVAMENTE</string>
+    <string name="loading">Carregando Matriz...</string>
+    <string name="error_generic">Erro de Sistema: ${error}</string>
+    <string name="error_no_network">Sem Conexão com a Rede Neural</string>
+    <string name="error_auth_failed">Credenciais Inválidas</string>
+    <string name="error_session_expired">Sessão Expirada</string>
+    <string name="playlist_title">NEOSTREAMS - NODOS DISPONÍVEIS</string>
+    <string name="stream_title">REPRODUZINDO STREAM</string>
+    <string name="status_buffering">Buffering Neural Stream...</string>
+    <string name="status_loading_playlist">Carregando lista de canais...</string>
+    <string name="status_ready">Pronto para Transmitir</string>
+    <string name="status_error">Erro de Transmissão</string>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_gradient">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NEOSTREAMS"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@color/cp_secondary"
+        android:layout_marginBottom="4dp"
+        android:letterSpacing="0.2" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NÓDULOS DE TRANSMISSÃO DISPONÍVEIS"
+        android:textSize="13sp"
+        android:textColor="@color/cp_text_secondary"
+        android:layout_marginBottom="16dp"
+        android:letterSpacing="0.1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider_cyber"
+        android:layout_marginBottom="16dp" />
+
+    <ListView
+        android:id="@+id/playlistListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_surface"
+        android:divider="@drawable/divider_cyber"
+        android:dividerHeight="1dp" />
+
+</LinearLayout>

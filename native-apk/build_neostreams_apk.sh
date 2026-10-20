@@ -1,0 +1,218 @@
+#!/usr/bin/env bash
+# NeoStreams Native APK Build Script
+#
+# Usage: bash build_neostreams_apk.sh <project-dir> [output-name]
+#
+# This script builds NeoStreams as a native Android APK using the Hermes
+# Android SDK and build tools without Gradle.
+#
+
+set -euo pipefail
+
+# Project directory (where this script lives)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${1:-${SCRIPT_DIR}}"
+OUT_NAME="${2:-NeoStreams}"
+
+# Android SDK and build tools
+SDK="${ANDROID_SDK_ROOT:-$LOCALAPPDATA/Android/Sdk}"
+BT_DIR="$(ls -1d "$SDK/build-tools/*/" | sort -V | tail -1)"
+BT="${BT_DIR%/}"
+PLATFORM="$(ls -1d "$SDK/platforms/android-*/" | sort -V | tail -1)"
+PLATFORM="${PLATFORM%/}"
+ANDROID_JAR="$PLATFORM/android.jar"
+
+# JBR (Android Studio's bundled JDK)
+JBR="${ANDROID_STUDIO_JBR:-/c/Program Files/Android/Android Studio/jbr}"
+JAVA_HOME_WIN="$(cygpath -w "$JBR" 2>/dev/null || echo "$JBR")"
+export JAVA_HOME="$JAVA_HOME_WIN"
+
+echo "=== NeoStreams Native APK Build ==="
+echo "Project: $PROJECT_DIR"
+echo "Output: $OUT_NAME"
+echo "Build-tools: $BT"
+echo "Platform: $PLATFORM"
+echo "Java: $JAVA_HOME"
+echo
+
+# Verify Android SDK tools
+if [ ! -d "$SDK/build-tools" ]; then
+    echo "Error: Android SDK build-tools not found at $SDK/build-tools"
+    echo "Please install Android Studio or ensure SDK is properly configured."
+    exit 1
+fi
+
+# Verify required files exist
+if [ ! -f "$BT/d8.bat" ] || [ ! -f "$BT/aapt2.exe" ] || [ ! -f "$BT/apksigner.bat" ]; then
+    echo "Error: Required Android build tools not found in $BT"
+    echo "Required files: d8.bat, aapt2.exe, apksigner.bat"
+    exit 1
+fi
+
+if [ ! -f "$ANDROID_JAR" ]; then
+    echo "Error: Android jar not found at $ANDROID_JAR"
+    exit 1
+fi
+
+if [ ! -f "$JBR/bin/javac.exe" ]; then
+    echo "Error: JBR javac not found at $JBR/bin/javac.exe"
+    exit 1
+fi
+
+# Create build directory
+mkdir -p "$PROJECT_DIR/build"
+
+# Compile Java code
+echo "==> Compiling Java code"
+cd "$PROJECT_DIR"
+
+# Find all Java files
+JAVA_FILES=$(find app/src/main/java -name "*.java")
+if [ -z "$JAVA_FILES" ]; then
+    echo "Error: No Java source files found in app/src/main/java"
+    exit 1
+fi
+
+echo "Java files to compile: $JAVA_FILES"
+
+# Compile Java
+echo "==> javac"
+"$JBR/bin/javac" --release 17 -encoding UTF-8 -nowarn \
+  -classpath "$ANDROID_JAR" -d "build/classes" \
+  $JAVA_FILES
+
+if [ $? -ne 0 ]; then
+    echo "Error: Java compilation failed"
+    exit 1
+fi
+
+echo "==> d8"
+"$BT/d8.bat" --release --min-api 24 --lib "$ANDROID_JAR" \
+  --output "build/dex" "build/classes"
+
+if [ $? -ne 0 ]; then
+    echo "Error: DEX compilation failed"
+    exit 1
+fi
+
+echo "==> aapt2 compile"
+"$BT/aapt2.exe" compile --dir "app/src/main/res" -o "build/res/"
+
+if [ $? -ne 0 ]; then
+    echo "Error: aapt2 compile failed"
+    exit 1
+fi
+
+echo "==> aapt2 link"
+"$BT/aapt2.exe" link \
+  -o "build/apk/base.apk" \
+  -I "$ANDROID_JAR" \
+  --manifest "app/src/main/AndroidManifest.xml" \
+  --java "build/gen" \
+  --min-sdk-version 24 \
+  --target-sdk-version "$(basename "$PLATFORM" | sed 's/android-//')" \
+  --version-code 100 \
+  --version-name "1.0.0" \
+  "build/res/*.flat"
+
+if [ $? -ne 0 ]; then
+    echo "Error: aapt2 link failed"
+    exit 1
+fi
+
+echo "==> inject dex"
+python3 - "$(cd "$PROJECT_DIR" && pwd)" <<'PY'
+import os, sys, zipfile, json, urllib.parse
+
+project_root = sys.argv[1]
+
+base_apk = os.path.join(project_root, "build", "apk", "base.apk")
+dex_file = os.path.join(project_root, "build", "dex", "classes.dex")
+output_apk = os.path.join(project_root, "build", "apk", "unsigned.apk")
+
+# Read the base APK
+with open(base_apk, 'rb') as f:
+    base_data = f.read()
+
+# Read the DEX file
+with open(dex_file, 'rb') as f:
+    dex_data = f.read()
+
+# Create new APK with DEX
+with zipfile.ZipFile(base_apk, 'r') as zin, zipfile.ZipFile(output_apk, 'w', zipfile.ZIP_STORED) as zout:
+    # Copy all files except classes.dex
+    for item in zin.namelist():
+        if item != 'classes.dex':
+            zout.writestr(item, zin.read(item), compress_type=zipfile.ZIP_DEFLATED)
+
+    # Add classes.dex (MUST be STORED)
+    zout.writestr('classes.dex', dex_data, compress_type=zipfile.ZIP_STORED)
+
+print("Created unsigned APK:", output_apk)
+PY
+
+if [ $? -ne 0 ]; then
+    echo "Error: DEX injection failed"
+    exit 1
+fi
+
+echo "==> zipalign"
+"$BT/zipalign.exe" -f -p 4 "build/apk/unsigned.apk" "build/apk/aligned.apk"
+
+if [ $? -ne 0 ]; then
+    echo "Error: zipalign failed"
+    exit 1
+fi
+
+echo "==> apksigner"
+KS_DIR="$HOME/.android"
+KS="$KS_DIR/debug.keystore"
+KS_WIN="$(cygpath -w "$KS" 2>/dev/null || echo "$KS")"
+
+if [ ! -f "$KS" ]; then
+    echo "==> Generating debug keystore"
+    mkdir -p "$KS_DIR"
+    "$JBR/bin/keytool" -genkeypair -v -keystore "$KS_WIN" \
+      -storepass android -keypass android \
+      -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
+      -dname "CN=Android Debug,O=Android,C=US"
+
+    if [ $? -ne 0 ]; then
+        echo "Error: Keytool failed"
+        exit 1
+    fi
+fi
+
+"$BT/apksigner.bat" sign \
+  --ks "$KS_WIN" \
+  --ks-pass pass:android \
+  --key-pass pass:android \
+  --ks-key-alias androiddebugkey \
+  --min-sdk-version 24 \
+  --out "build/apk/${OUT_NAME}.apk" \
+  "build/apk/aligned.apk"
+
+if [ $? -ne 0 ]; then
+    echo "Error: apksigner failed"
+    exit 1
+fi
+
+echo "==> Verifying APK"
+"$BT/apksigner.bat" verify --verbose --print-certs "build/apk/${OUT_NAME}.apk" 2>/dev/null \
+  | grep -E "^(Verifies|Number of signers|Signer #1 certificate DN)" || echo "Verification completed"
+
+"$BT/aapt2.exe" dump badging "build/apk/${OUT_NAME}.apk" 2>/dev/null \
+  | grep -E "^(package|application-label|launchable-activity)" || echo "APK info dump completed"
+
+echo
+echo "=== Build Successful! ==="
+echo "APK Location: $(pwd)/build/apk/${OUT_NAME}.apk"
+echo
+echo "APK size: $(du -h "build/apk/${OUT_NAME}.apk" | cut -f1)"
+echo "APK hash: $(sha256sum "build/apk/${OUT_NAME}.apk" | cut -d' ' -f1)"
+echo
+echo "To install on Android device:"
+echo "  adb install -r \"$(pwd)/build/apk/${OUT_NAME}.apk\""
+
+echo
+echo "=== NeoStreams Native APK Build Complete ==="

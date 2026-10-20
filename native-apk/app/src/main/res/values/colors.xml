@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cyberpunk palette -->
+    <color name="cp_background">#0A0A12</color>
+    <color name="cp_background_gradient_top">#0F0F1A</color>
+    <color name="cp_background_gradient_bottom">#05050A</color>
+    <color name="cp_surface">#1A1A25</color>
+    <color name="cp_surface_dark">#12121A</color>
+    <color name="cp_primary">#00FFFF</color>
+    <color name="cp_primary_dark">#00B3B3</color>
+    <color name="cp_secondary">#FF00FF</color>
+    <color name="cp_tertiary">#8A2BE2</color>
+    <color name="cp_text_primary">#E0E0FF</color>
+    <color name="cp_text_secondary">#A0A0B0</color>
+    <color name="cp_text_disabled">#555566</color>
+    <color name="cp_glow">#00FFFF</color>
+    <color name="cp_error">#FF3B3B</color>
+    <color name="cp_success">#00FF88</color>
+    <color name="cp_warning">#FFAA00</color>
+
+    <!-- Legacy aliases -->
+    <color name="colorPrimary">@color/cp_primary</color>
+    <color name="colorPrimaryDark">@color/cp_primary_dark</color>
+    <color name="colorAccent">@color/cp_secondary</color>
+    <color name="colorBackground">@color/cp_background</color>
+    <color name="colorTextPrimary">@color/cp_text_primary</color>
+    <color name="colorTextSecondary">@color/cp_text_secondary</color>
+</resources>

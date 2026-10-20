@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NeoStreams" parent="android:Theme.Material.Dark">
+        <item name="android:colorBackground">@color/cp_background</item>
+        <item name="android:colorPrimary">@color/cp_primary</item>
+        <item name="android:colorPrimaryDark">@color/cp_primary_dark</item>
+        <item name="android:colorAccent">@color/cp_secondary</item>
+    </style>
+</resources>

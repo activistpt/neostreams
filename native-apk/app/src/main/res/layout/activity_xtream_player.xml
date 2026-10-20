@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REPRODUZINDO STREAM"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/cp_secondary"
+        android:layout_marginBottom="8dp"
+        android:letterSpacing="0.15" />
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_below="@id/titleText"
+        android:background="#000000"
+        android:layout_marginBottom="16dp">
+        <requestFocus />
+    </SurfaceView>
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/surfaceView"
+        android:text="Inicializando Neural Stream..."
+        android:textSize="14sp"
+        android:textColor="@color/cp_text_secondary"
+        android:layout_marginBottom="24dp"
+        android:letterSpacing="0.1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/statusText"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/retryButton"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
+            android:text="RETRY"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/cp_text_primary"
+            android:background="@drawable/btn_primary"
+            android:layout_marginEnd="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="@drawable/indicator_active"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STREAM ATIVO"
+            android:textSize="11sp"
+            android:textColor="@color/cp_primary"
+            android:letterSpacing="0.1" />
+    </LinearLayout>
+
+</RelativeLayout>
